@@ -2,4 +2,3 @@ Flask
 bcrypt
 cryptography
 gunicorn
-pip install flask bcrypt cryptography
