@@ -1,0 +1,19 @@
+<h2>Credenciales</h2>
+
+<table border="1">
+    <tr>
+        <th>Servicio</th>
+        <th>Usuario</th>
+        <th>Contraseña</th>
+    </tr>
+
+    {% for d in datos %}
+    <tr>
+        <td>{{ d[1] }}</td>
+        <td>{{ d[2] }}</td>
+        <td>{{ d[3] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/dashboard">Volver</a>

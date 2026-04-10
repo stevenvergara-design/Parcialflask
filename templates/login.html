@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <!-- Bootstrap para diseño moderno -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f6f9; /* Fondo gris claro elegante */
+        }
+
+        .auth-box {
+            width: 380px;
+            margin: auto;
+            margin-top: 10%;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="auth-box">
+
+    <div class="card shadow-sm p-4">
+
+        <!-- TÍTULO -->
+        <h4 class="text-center">🔐 Iniciar sesión</h4>
+
+        <!-- SUBTÍTULO EXPLICATIVO -->
+        <p class="text-center text-muted small">
+            Ingresa tu contraseña maestra
+        </p>
+
+        <!-- FORMULARIO LOGIN -->
+        <form method="POST">
+
+            <!-- INPUT CONTRASEÑA -->
+            <div class="mb-2">
+                <label class="form-label">Contraseña</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+
+            <!-- MENSAJE DE VALIDACIÓN -->
+            <div id="msg" class="small mb-2"></div>
+
+            <!-- BOTÓN LOGIN -->
+            <button class="btn btn-dark w-100">
+                Iniciar sesión
+            </button>
+
+        </form>
+
+        <hr>
+
+        <!-- LINK A REGISTRO -->
+        <a href="/register" class="btn btn-outline-secondary w-100">
+            Crear contraseña maestra
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- VALIDACIÓN JAVASCRIPT -->
+<!-- ========================= -->
+<script>
+/*
+    Este script valida la contraseña en tiempo real.
+    No bloquea el backend, solo ayuda al usuario visualmente.
+*/
+
+// Capturamos elementos del DOM
+const password = document.getElementById("password");
+const msg = document.getElementById("msg");
+
+// Evento: cada vez que el usuario escribe
+password.addEventListener("input", function () {
+
+    const value = password.value;
+
+    // REGLAS DE SEGURIDAD
+    const minLength = value.length >= 8; // mínimo 8 caracteres
+    const upper = /[A-Z]/.test(value);   // al menos una mayúscula
+    const lower = /[a-z]/.test(value);   // al menos una minúscula
+    const number = /[0-9]/.test(value);  // al menos un número
+    const special = /[!@#$%^&*(),.?":{}|<>]/.test(value); // símbolo
+
+    let errors = [];
+
+    // Verificamos cada regla
+    if (!minLength) errors.push("mínimo 8 caracteres");
+    if (!upper) errors.push("una mayúscula");
+    if (!lower) errors.push("una minúscula");
+    if (!number) errors.push("un número");
+    if (!special) errors.push("un carácter especial");
+
+    // Si cumple todo
+    if (errors.length === 0) {
+        msg.innerHTML = "✅ Contraseña segura";
+        msg.style.color = "green";
+    } 
+    // Si no cumple
+    else {
+        msg.innerHTML = "⚠ Debe contener: " + errors.join(", ");
+        msg.style.color = "red";
+    }
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+
+    <!-- Bootstrap: librería para diseño moderno sin CSS complejo -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Fondo general de la pantalla */
+        body {
+            background: #f4f6f9;
+        }
+
+        /* Contenedor centrado del formulario */
+        .box {
+            width: 380px;
+            margin: auto;
+            margin-top: 8%;
+        }
+
+        /* Tarjeta visual del formulario */
+        .card {
+            border: none;
+            border-radius: 12px;
+        }
+
+        /* Estilo base de cada regla del checklist */
+        .check {
+            font-size: 14px;
+        }
+
+        /* Estado correcto (verde) */
+        .ok {
+            color: green;
+        }
+
+        /* Estado incorrecto (rojo) */
+        .bad {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ============================= -->
+<!-- CONTENEDOR PRINCIPAL -->
+<!-- ============================= -->
+<div class="box">
+
+    <div class="card shadow-sm p-4">
+
+        <!-- TÍTULO DEL FORMULARIO -->
+        <h4 class="text-center">🛡 Crear contraseña maestra</h4>
+
+        <!-- ============================= -->
+        <!-- FORMULARIO DE REGISTRO -->
+        <!-- ============================= -->
+        <form method="POST" id="form">
+
+            <!-- INPUT DE CONTRASEÑA -->
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+
+                <!-- 
+                    id="password"
+                    Permite capturar lo que escribe el usuario
+                    desde JavaScript para validarlo en tiempo real
+                -->
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+
+            <!-- ============================= -->
+            <!-- CHECKLIST DE SEGURIDAD -->
+            <!-- ============================= -->
+            <div class="mb-3">
+
+                <p class="mb-1">Requisitos de seguridad:</p>
+
+                <!-- Cada línea representa una regla de validación -->
+
+                <div id="len" class="check bad">❌ Mínimo 8 caracteres</div>
+                <div id="upper" class="check bad">❌ Una letra mayúscula</div>
+                <div id="lower" class="check bad">❌ Una letra minúscula</div>
+                <div id="number" class="check bad">❌ Un número</div>
+                <div id="special" class="check bad">❌ Un carácter especial</div>
+
+            </div>
+
+            <!-- ============================= -->
+            <!-- BOTÓN DE ENVÍO -->
+            <!-- ============================= -->
+
+            <!-- 
+                disabled:
+                El botón inicia desactivado y SOLO se activa
+                cuando la contraseña cumple todas las reglas
+            -->
+            <button id="btn" class="btn btn-success w-100" disabled>
+                Crear cuenta
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- ============================= -->
+<!-- VALIDACIÓN EN JAVASCRIPT -->
+<!-- ============================= -->
+<script>
+
+/*
+    OBJETIVO DEL SCRIPT:
+    Validar la contraseña en tiempo real y evitar
+    que el usuario envíe el formulario si no es segura.
+*/
+
+// 1. Captura del input de contraseña
+const password = document.getElementById("password");
+
+// 2. Botón de envío
+const btn = document.getElementById("btn");
+
+// 3. Elementos del checklist
+const len = document.getElementById("len");
+const upper = document.getElementById("upper");
+const lower = document.getElementById("lower");
+const number = document.getElementById("number");
+const special = document.getElementById("special");
+
+// =============================
+// EVENTO: cada vez que el usuario escribe
+// =============================
+password.addEventListener("input", function () {
+
+    // Valor actual del input
+    const value = password.value;
+
+    // =============================
+    // REGLAS DE VALIDACIÓN
+    // =============================
+
+    // 1. mínimo 8 caracteres
+    const isLen = value.length >= 8;
+
+    // 2. al menos una mayúscula
+    const isUpper = /[A-Z]/.test(value);
+
+    // 3. al menos una minúscula
+    const isLower = /[a-z]/.test(value);
+
+    // 4. al menos un número
+    const isNumber = /[0-9]/.test(value);
+
+    // 5. al menos un carácter especial
+    const isSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+
+    // =============================
+    // ACTUALIZACIÓN VISUAL DEL CHECKLIST
+    // =============================
+    updateCheck(len, isLen, "Mínimo 8 caracteres");
+    updateCheck(upper, isUpper, "Letra mayúscula");
+    updateCheck(lower, isLower, "Letra minúscula");
+    updateCheck(number, isNumber, "Número");
+    updateCheck(special, isSpecial, "Carácter especial");
+
+    // =============================
+    // CONTROL DEL BOTÓN
+    // =============================
+    // Solo se habilita si TODAS las reglas se cumplen
+    if (isLen && isUpper && isLower && isNumber && isSpecial) {
+        btn.disabled = false; // permite enviar formulario
+    } else {
+        btn.disabled = true;  // bloquea envío
+    }
+
+});
+
+// =============================
+// FUNCIÓN REUTILIZABLE
+// =============================
+/*
+    Esta función evita repetir código.
+    Cambia el texto y color del checklist según el estado.
+*/
+function updateCheck(element, condition, text) {
+
+    if (condition) {
+        // Si cumple la regla → estado correcto
+        element.innerHTML = "✅ " + text;
+        element.classList.remove("bad");
+        element.classList.add("ok");
+    } else {
+        // Si NO cumple → estado incorrecto
+        element.innerHTML = "❌ " + text;
+        element.classList.remove("ok");
+        element.classList.add("bad");
+    }
+}
+
+</script>
+
+</body>
+</html>
